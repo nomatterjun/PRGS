@@ -30,3 +30,21 @@
 
 // https://school.programmers.co.kr/learn/courses/30/lessons/161989
 
+import Foundation
+
+// n - 구역의 개수 / 인덱스 (1부터)
+// m - 룰러의 길이
+// section - 칠하기로 정한 구역들의 번호
+func solution(_ n:Int, _ m:Int, _ section:[Int]) -> Int {
+    var wall = Array(repeating: false, count: n)
+    var count = 0
+    section.forEach {
+        if wall[$0-1] == false {
+            let paint = min(m, n - $0 + 1)
+            wall.replaceSubrange(
+                $0-1..<min($0+m-1, n-1), with: Array(repeating: true, count: paint))
+            count += 1
+        }
+    }
+    return count
+}
