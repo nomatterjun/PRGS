@@ -1,12 +1,27 @@
 import Foundation
 
-func solution(_ k:Int, _ score:[Int]) -> [Int] {
-  var cache: [Int] = []
-  return score.map { n in
-    if cache.count < k { cache.append(n); return n }
-    let num = min(cache.min()!, n)
-    cache[cache.indices.first { cache[$0] <= num }!] = num
-    return num
+func solution(_ keymap:[String], _ targets:[String]) -> [Int] {
+  var map = [Character: Int]() // 각 입력값들의 최소 입력 횟수 Dictionary
+  var answer = [Int]()
+
+  for key in keymap { // "ABACD"
+    key.enumerated().forEach { idx, char in // "A"
+      if map[char, default: Int.max] > idx {
+        map[char] = idx + 1 // 작은 값을 map에 저장
+      }
+    }
   }
+
+  targets.forEach {
+    var sum = 0
+    for target in $0 {
+      guard let key = map[target] else { sum = -1; break }
+      sum += key
+    }
+    answer.append(sum)
+  }
+
+  return answer
 }
-solution(3, [10, 100, 20, 150, 1, 100, 200])
+
+solution(["ABACD", "BCEFD"], ["ABCD","AABB"])
