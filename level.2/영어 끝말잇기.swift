@@ -31,3 +31,33 @@
 
 // https://school.programmers.co.kr/learn/courses/30/lessons/12981
 
+import Foundation
+
+// n - 사람 수
+func solution(_ n:Int, _ words:[String]) -> [Int] {
+    let numberOfWords = words.count
+    var dict: Dictionary<String, Bool> = [:]
+    words.forEach {
+        dict[$0, default: false] = false
+    }
+    var lastWord: String = ""
+    var noFailure: Bool = false
+    var person: Int = 0
+    var cycle: Int = 0
+    
+    for (idx, word) in words.enumerated() {
+        person = (idx % n) + 1
+        cycle = (idx / n) + 1
+        if dict[word]! == true { break }
+        if idx != 0 && lastWord.last! != word.first! { break }
+        if idx == numberOfWords - 1 {
+            noFailure = true
+            break
+        }
+        
+        dict[word]! = true
+        lastWord = word
+    }
+    
+    return noFailure ? [0, 0] : [person, cycle]
+}

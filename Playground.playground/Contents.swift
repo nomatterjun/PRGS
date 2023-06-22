@@ -1,27 +1,26 @@
 import Foundation
 
-func solution(_ keymap:[String], _ targets:[String]) -> [Int] {
-  var map = [Character: Int]() // 각 입력값들의 최소 입력 횟수 Dictionary
-  var answer = [Int]()
+func solution(_ n:Int, _ a:Int, _ b:Int) -> Int {
+  var a: Int = a
+  var b: Int = b
+  var round: Int = 1
 
-  for key in keymap { // "ABACD"
-    key.enumerated().forEach { idx, char in // "A"
-      if map[char, default: Int.max] > idx {
-        map[char] = idx + 1 // 작은 값을 map에 저장
-      }
-    }
+  while !a.isMatching(with: b) {
+    a = a.isEven ? a / 2 : (a + 1) / 2
+    b = b.isEven ? b / 2 : (b + 1) / 2
+    round += 1
   }
 
-  targets.forEach {
-    var sum = 0
-    for target in $0 {
-      guard let key = map[target] else { sum = -1; break }
-      sum += key
-    }
-    answer.append(sum)
-  }
-
-  return answer
+  return round
 }
 
-solution(["ABACD", "BCEFD"], ["ABCD","AABB"])
+extension Int {
+  var isEven: Bool {
+    return self % 2 == 0
+  }
+
+  func isMatching(with num: Int) -> Bool {
+    let smaller = min(self, num)
+    return (self + num) / 2 == smaller
+  }
+}
